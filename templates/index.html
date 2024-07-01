@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAPTCHA Prediction</title>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    
+</head>
+<body>
+    <div class="container">
+        <h1>CAPTCHA Prediction</h1>
+        <input type="file" id="fileInput">
+        <button onclick="uploadFile()">Predict</button>
+        <div class="result" id="result"></div>
+    </div>
+    <script>
+        async function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const resultDiv = document.getElementById('result');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                resultDiv.innerHTML = 'Please select a file.';
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                resultDiv.innerHTML = `Prediction: ${data.prediction}`;
+            } catch (error) {
+                resultDiv.innerHTML = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
