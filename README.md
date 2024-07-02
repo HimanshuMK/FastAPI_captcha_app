@@ -37,7 +37,7 @@ captcha_app
 
 1. Clone the repository:
     ```bash
-    https://github.com/HimanshuMK/FastAPI_captcha_app.git
+    git clone https://github.com/HimanshuMK/FastAPI_captcha_app.git
     ```
 2. Navigate to the project directory:
     ```bash
