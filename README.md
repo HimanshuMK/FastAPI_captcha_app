@@ -37,11 +37,11 @@ captcha_app
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your_username/captcha_recognition.git
+    https://github.com/HimanshuMK/FastAPI_captcha_app.git
     ```
 2. Navigate to the project directory:
     ```bash
-    cd captcha_recognition
+    cd FastAPI_captcha_app
     ```
 3. Create a virtual environment:
     ```bash
