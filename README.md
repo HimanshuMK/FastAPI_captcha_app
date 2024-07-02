@@ -45,16 +45,16 @@ captcha_app
     ```
 3. Create a virtual environment:
     ```bash
-    python -m venv venv
+    python -m venv myenv
     ```
 4. Activate the virtual environment:
     - On Windows:
         ```bash
-        venv\Scripts\activate
+        myenv\Scripts\activate
         ```
     - On macOS/Linux:
         ```bash
-        source venv/bin/activate
+        source myenv/bin/activate
         ```
 5. Install the dependencies:
     ```bash
