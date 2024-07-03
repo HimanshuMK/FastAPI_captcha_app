@@ -1,6 +1,7 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 import tensorflow as tf
 import numpy as np
 from PIL import Image, UnidentifiedImageError
@@ -9,25 +10,29 @@ import string
 
 app = FastAPI()
 
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Change this to the specific origins you want to allow
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Load your TensorFlow model
-model = tf.keras.models.load_model('model\captcha_model_v3.keras')
+model = tf.keras.models.load_model('model/captcha_model_v3.keras')
 
 # Define the character set
 CHAR_SET = string.ascii_lowercase + string.digits
 
 def preprocess_image(image: Image.Image):
-    # Convert the image to grayscale
     image = image.convert('L')
-    # Resize the image to the input size required by your model
-    image = image.resize((200, 50))  #model expected input size
-    # Convert the image to a numpy array and normalize it
+    image = image.resize((200, 50))
     image_array = np.array(image) / 255.0
-    # Add batch dimension and channel dimension if necessary
-    image_array = np.expand_dims(image_array, axis=(0, -1))  # shape becomes (1, height, width, 1)
+    image_array = np.expand_dims(image_array, axis=(0, -1))
     return image_array
 
 def decode_prediction(prediction):
-    # Decode the prediction into a CAPTCHA string
     captcha = ''
     for char_probs in prediction:
         char_index = np.argmax(char_probs, axis=-1)
@@ -37,16 +42,11 @@ def decode_prediction(prediction):
 @app.post('/predict')
 async def predict(file: UploadFile = File(...)):
     try:
-        # Read the image file
         image_data = await file.read()
         image = Image.open(io.BytesIO(image_data))
-        # Preprocess the image
         input_data = preprocess_image(image)
-        # Make prediction
         prediction = model.predict(input_data)
-        # prediction.shape is (5, 1, 36)
-        prediction = np.squeeze(prediction, axis=1)  # Now prediction.shape is (5, 36)
-        # Decode the prediction
+        prediction = np.squeeze(prediction, axis=1)
         captcha = decode_prediction(prediction)
         return {'prediction': captcha}
     except UnidentifiedImageError:

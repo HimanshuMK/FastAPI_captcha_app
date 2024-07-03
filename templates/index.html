@@ -19,31 +19,35 @@
             const fileInput = document.getElementById('fileInput');
             const resultDiv = document.getElementById('result');
             const file = fileInput.files[0];
-
+        
             if (!file) {
                 resultDiv.innerHTML = 'Please select a file.';
                 return;
             }
-
+        
             const formData = new FormData();
             formData.append('file', file);
-
+        
             try {
-                const response = await fetch('http://127.0.0.1:8000/predict', {
+                const response = await fetch('http://localhost:8000/predict', {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
                 });
-
+        
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-
+        
                 const data = await response.json();
                 resultDiv.innerHTML = `Prediction: ${data.prediction}`;
             } catch (error) {
                 resultDiv.innerHTML = `Error: ${error.message}`;
             }
         }
+        
     </script>
 </body>
 </html>
