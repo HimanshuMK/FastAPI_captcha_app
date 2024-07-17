@@ -75,5 +75,8 @@ captcha_app
 2. Click the "Predict" button to get the CAPTCHA prediction.
 3. The prediction result will be displayed below the button.
 
+## Screenshots
+![Screenshot 2024-07-17 194212](https://github.com/user-attachments/assets/4f626ed5-17f4-4112-a5b5-354a1fc81a15)
+![Screenshot 2024-07-17 194253](https://github.com/user-attachments/assets/ecbd29bc-00db-48ee-a934-1b75c5b585b5)
 
 
